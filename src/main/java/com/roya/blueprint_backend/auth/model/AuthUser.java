@@ -1,7 +1,6 @@
 package com.roya.blueprint_backend.auth.model;
 
 import com.roya.blueprint_backend.users.User;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

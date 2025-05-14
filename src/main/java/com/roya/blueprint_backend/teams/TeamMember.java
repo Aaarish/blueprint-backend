@@ -6,7 +6,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "BLUEPRINT_TEAM_MEMBERS")
+@Table(name = "BLUEPRINT_TEAM_MEMBERS",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"user_id", "team_id"})
+        })
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class TeamMember {
     @Id
@@ -15,14 +18,15 @@ public class TeamMember {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "team_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "team_id", referencedColumnName = "id", nullable = false, unique = false)
     private Team team;
 
     @Enumerated(EnumType.STRING)
     private TeamRole role;
+    private String designation;
 
     @OneToOne
-    @JoinColumn(name="user_id", referencedColumnName = "userId", nullable = false)
+    @JoinColumn(name="user_id", referencedColumnName = "userId", nullable = false, unique = false)
     private User user;
 
 }

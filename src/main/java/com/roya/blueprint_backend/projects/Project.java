@@ -1,5 +1,6 @@
 package com.roya.blueprint_backend.projects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roya.blueprint_backend.common.Category;
 import com.roya.blueprint_backend.teams.Team;
 import com.roya.blueprint_backend.teams.TeamMember;
@@ -10,6 +11,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -36,6 +38,10 @@ public class Project {
     @JoinColumn(name = "team_id", referencedColumnName = "id", nullable = false)
     private Team team;
 
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY ,orphanRemoval = true, mappedBy = "project")
+    private List<ProjectApplication> applicants;
+
     public Project(String title, String description, Category category, User creator) {
         this.id = UUID.randomUUID().toString();
         this.title = title;
@@ -43,6 +49,7 @@ public class Project {
         this.category = category;
         this.creator = creator;
         this.createdAt = new Date();
+        this.applicants = new ArrayList<>();
         this.team = Team.builder()
                 .projectId(this.getId())
                 .teamMembers(new ArrayList<>())
@@ -51,6 +58,7 @@ public class Project {
                 .role(TeamRole.CREATOR)
                 .user(this.getCreator())
                 .team(this.getTeam())
+                .designation("Project Creator")
                 .build());
     }
 }
